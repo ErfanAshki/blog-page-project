@@ -14,3 +14,6 @@ class Post(models.Model):
     datetime_modified = models.DateTimeField(auto_now=True)
     status = models.CharField(choices=STATUS_CONDITION, max_length=5)
 
+    def __str__(self):
+        return f"{self.title}"
+

@@ -1,0 +1,19 @@
+{% extends '_base.html' %}
+
+{% block page_title %}post list{% endblock page_title %}
+
+
+{% block content %}
+
+    {% for post in posts %}
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.description }}</p>
+        <b>{{ post.author }}</b>
+        <h5>{{ post.datetime_created }}</h5>
+        <p>{{ post.status }}</p>
+        <p>----------------------------------------------</p> <br>
+
+    {% endfor %}
+
+
+{% endblock content %}
