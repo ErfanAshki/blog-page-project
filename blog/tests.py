@@ -6,17 +6,18 @@ from .models import Post
 
 
 class BlogTest(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='erf', email='erf@gmail.com', password='erf123')
-        self.post = Post.objects.create(
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(username='erf', email='erf@gmail.com', password='erf123')
+        cls.post = Post.objects.create(
             title='title1',
             description='des1',
-            author=self.user
+            author=cls.user
         )
-        self.post2 = Post.objects.create(
+        cls.post2 = Post.objects.create(
             title='title2',
             description='des2',
-            author=self.user,
+            author=cls.user,
             status=Post.STATUS_CONDITION[1][0]
         )
 
