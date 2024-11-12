@@ -76,3 +76,35 @@ class BlogTest(TestCase):
         response = self.client.get(reverse('post_detail', args=[self.post.id]))
         self.assertTemplateUsed(response, 'blog/post_detail.html')
 
+    def test_title_in_page_equal_to_title_in_database(self):
+        self.assertEqual(self.post.title, 'title1')
+        self.assertEqual(self.post2.title, 'title2')
+        self.assertEqual(self.post.description, 'des1')
+        self.assertEqual(self.post2.description, 'des2')
+
+    def test_create_view(self):
+        response = self.client.post(reverse('post_create'), {
+            'title': 'some title',
+            'description': 'some description',
+            'author': self.user.id,
+            'status': 'PUB',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Post.objects.last().title, 'some title')
+        self.assertEqual(Post.objects.last().description, 'some description')
+
+    def test_update_view(self):
+        response = self.client.post(reverse('post_update', args=[self.post2.id]), {
+            'title': 'updated title',
+            'description': 'updated description',
+            'author': self.post2.author.id,
+            'status': 'PUB',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Post.objects.last().title, 'updated title')
+        self.assertEqual(Post.objects.last().description, 'updated description')
+
+    def test_delete_view(self):
+        response = self.client.post(reverse('post_delete', args=[self.post2.id]))
+        self.assertEqual(response.status_code, 302)
+
