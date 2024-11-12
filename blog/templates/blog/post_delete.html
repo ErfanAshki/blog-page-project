@@ -1,0 +1,20 @@
+{% extends '_base.html' %}
+
+{% block page_title %}delete {{ post.title }}{% endblock page_title %}
+
+
+{% block content %}
+
+    <div class="container mt-4">
+        <div class="card shadow-sm my-3">
+            <div class="card-body">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <p>Do you want to delete {{ post.title }} blog ?</p> <br>
+                    <button type="submit" class="btn btn-danger">yes I'm sure</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
