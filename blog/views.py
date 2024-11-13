@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse_lazy
 from django.views import generic
 
 from .models import Post
@@ -30,37 +31,56 @@ class PostDetailView(generic.DetailView):
     context_object_name = 'post'
 
 
-def post_create_view(request):
-    if request.method == 'POST':
-        form = NewPostForm(request.POST)
-        if form.is_valid():
-            form.save()
-            form = NewPostForm()
-            return redirect('post_list')
-    else:
-        form = NewPostForm()
-
-    return render(request, 'blog/post_create.html', {'form': form})
-
-
-def post_update_view(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-
-    form = NewPostForm(request.POST or None, instance=post)
-    if form.is_valid():
-        form.save()
-        return redirect('post_list')
-
-    return render(request, 'blog/post_create.html', {'form': form})
+# def post_create_view(request):
+#     if request.method == 'POST':
+#         form = NewPostForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             form = NewPostForm()
+#             return redirect('post_list')
+#     else:
+#         form = NewPostForm()
+#
+#     return render(request, 'blog/post_create.html', {'form': form})
 
 
-def post_delete_view(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+class PostCreateView(generic.CreateView):
+    form_class = NewPostForm
+    template_name = 'blog/post_create.html'
+    context_object_name = 'form'
 
-    if request.method == 'POST':
-        post.delete()
-        return redirect('post_list')
 
-    return render(request, 'blog/post_delete.html', {'post': post})
+# def post_update_view(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#
+#     form = NewPostForm(request.POST or None, instance=post)
+#     if form.is_valid():
+#         form.save()
+#         return redirect('post_list')
+#
+#     return render(request, 'blog/post_create.html', {'form': form})
 
+
+class PostUpdateView(generic.UpdateView):
+    model = Post
+    form_class = NewPostForm
+    template_name = 'blog/post_create.html'
+    context_object_name = 'form'
+
+
+# def post_delete_view(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#
+#     if request.method == 'POST':
+#         post.delete()
+#         return redirect('post_list')
+#
+#     return render(request, 'blog/post_delete.html', {'post': post})
+
+
+class PostDeleteView(generic.DeleteView):
+    model = Post
+    template_name = 'blog/post_delete.html'
+    context_object_name = 'post'
+    success_url = reverse_lazy('post_list')
 
